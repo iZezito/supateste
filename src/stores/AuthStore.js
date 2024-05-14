@@ -36,6 +36,17 @@ class AuthStore {
             console.log(data);
         }
     }
+
+    async loginWithProvider(provider){
+        const { user, session, error } = await supabase.auth.signInWithOAuth({
+            provider: provider
+        });
+        if(error){
+            console.log(error);
+        }else{
+            this.user = user;
+        }
+    }
 }
 
 

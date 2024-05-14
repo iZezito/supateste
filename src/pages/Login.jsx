@@ -3,6 +3,7 @@ import supabase from "../services/config.js";
 import { observer } from "mobx-react-lite";
 import {useNavigate} from "react-router-dom";
 import { useRootStore } from "../stores/RootStore.jsx";
+import countryStore from "../stores/CountryStore.js";
 
 const Login = () => {
     const { authStore } = useRootStore();
@@ -12,8 +13,12 @@ const Login = () => {
         console.log(authStore.loginForm);
         await authStore.login();
         navigate('/');
-
     };
+
+    const loginWithProvider = async (provider) => {
+        await authStore.loginWithProvider(provider);
+        navigate('/');
+    }
 
     return (
         <section className="py-3 py-md-5 py-xl-8">
@@ -102,7 +107,7 @@ const Login = () => {
                             <div className="col-12 col-lg-5 d-flex align-items-center">
                                 <div className="d-flex gap-3 flex-column w-100">
                                     <a
-                                       className="btn bsb-btn-2xl btn-outline-dark rounded-0 d-flex align-items-center">
+                                       className="btn bsb-btn-2xl btn-outline-dark rounded-0 d-flex align-items-center" onClick={() => loginWithProvider('google')}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                              fill="currentColor" className="bi bi-google text-danger"
                                              viewBox="0 0 16 16">
@@ -111,8 +116,8 @@ const Login = () => {
                                         </svg>
                                         <span className="ms-2 fs-6 flex-grow-1">Continue with Google</span>
                                     </a>
-                                    <a href="#"
-                                       className="btn bsb-btn-2xl btn-outline-dark rounded-0 d-flex align-items-center">
+                                    <a
+                                       className="btn bsb-btn-2xl btn-outline-dark rounded-0 d-flex align-items-center" onClick={() => loginWithProvider('apple')}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                              fill="currentColor" className="bi bi-apple text-dark" viewBox="0 0 16 16">
                                             <path
@@ -122,8 +127,8 @@ const Login = () => {
                                         </svg>
                                         <span className="ms-2 fs-6 flex-grow-1">Continue with Apple</span>
                                     </a>
-                                    <a href="#"
-                                       className="btn bsb-btn-2xl btn-outline-dark rounded-0 d-flex align-items-center">
+                                    <a
+                                       className="btn bsb-btn-2xl btn-outline-dark rounded-0 d-flex align-items-center" onClick={() => loginWithProvider('facebook')}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                              fill="currentColor" className="bi bi-facebook text-primary"
                                              viewBox="0 0 16 16">
