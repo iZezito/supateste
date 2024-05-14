@@ -10,7 +10,7 @@ const Login = () => {
     const login = async () => {
         console.log(authStore.loginForm);
         await authStore.login();
-        navigate('/helloWorld');
+        navigate('/');
     };
 
     const loginWithProvider = async (provider) => {
