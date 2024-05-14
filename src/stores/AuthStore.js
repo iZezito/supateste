@@ -4,10 +4,18 @@ import supabase from "../services/config.js";
 class AuthStore {
     user = null;
     rootStore;
+    loginForm = {
+        email: '',
+        password: '',
+    }
     constructor(rootStore){
         this.rootStore = rootStore;
         this.getUser();
         makeAutoObservable(this);
+    }
+
+    changeLoginForm(key, value){
+        this.loginForm[key] = value;
     }
 
     async getUser(){
@@ -17,12 +25,15 @@ class AuthStore {
         }
     }
 
-    async login(){
-        const { user, session, error } = await supabase.auth.signInWithOAuth({
-            provider: 'google'
+    async login() {
+        const {data, error} = supabase.auth.signInWithPassword({
+            email: this.loginForm.email,
+            password: this.loginForm.password,
         });
-        if(user){
-            this.user = user;
+        if(error) {
+            console.log(error);
+        } else {
+            console.log(data);
         }
     }
 }

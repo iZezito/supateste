@@ -9,6 +9,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     const login = async () => {
+        console.log(authStore.loginForm);
         await authStore.login();
         navigate('/');
 
@@ -29,13 +30,19 @@ const Login = () => {
                     <div className="col-12 col-lg-10 col-xl-8">
                         <div className="row gy-5 justify-content-center">
                             <div className="col-12 col-lg-5">
-                                <form action="#">
+                                <form onSubmit={async (e)=>{
+                                    e.preventDefault();
+                                    await authStore.login();
+                                    navigate('/');
+                                }}>
                                     <div className="row gy-3 overflow-hidden">
                                         <div className="col-12">
                                             <div className="form-floating mb-3">
                                                 <input type="email"
+                                                       value={authStore.loginForm.email}
                                                        className="form-control border-0 border-bottom rounded-0"
-                                                       name="email" id="email" placeholder="name@example.com" required/>
+                                                       name="email" id="email" placeholder="name@example.com" required
+                                                        onChange={(e) => authStore.changeLoginForm('email', e.target.value)}/>
                                                 <label htmlFor="email" className="form-label">Email</label>
                                             </div>
                                         </div>
@@ -44,6 +51,8 @@ const Login = () => {
                                                 <input type="password"
                                                        className="form-control border-0 border-bottom rounded-0"
                                                        name="password" id="password" defaultValue=""
+                                                         onChange={(e) => authStore.changeLoginForm('password', e.target.value)}
+                                                       value={authStore.loginForm.password}
                                                        placeholder="Password" required/>
                                                 <label htmlFor="password" className="form-label">Password</label>
                                             </div>
@@ -93,7 +102,7 @@ const Login = () => {
                             <div className="col-12 col-lg-5 d-flex align-items-center">
                                 <div className="d-flex gap-3 flex-column w-100">
                                     <a
-                                       className="btn bsb-btn-2xl btn-outline-dark rounded-0 d-flex align-items-center" onClick={login}>
+                                       className="btn bsb-btn-2xl btn-outline-dark rounded-0 d-flex align-items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                              fill="currentColor" className="bi bi-google text-danger"
                                              viewBox="0 0 16 16">

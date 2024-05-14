@@ -9,7 +9,6 @@ import './App.css';
 const App = () => {
     const { authStore } = useRootStore();
 
-
     return(
         <Routes>
             {authStore.user && <Route path="/" element={<Home />} />}
