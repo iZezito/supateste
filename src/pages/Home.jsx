@@ -3,34 +3,33 @@ import supabase from '../services/config.js';
 import '../App.css';
 import { observer } from "mobx-react-lite";
 import { useRootStore } from "../stores/RootStore.jsx";
+import { useNavigate} from "react-router-dom";
+import ContentLoader from "../components/ContentLoader.jsx";
 
 function Home() {
-    const { countryStore } = useRootStore();
-    const [user, setUser] = useState(null);
+    const { countryStore, authStore } = useRootStore();
     const [editItemId, setEditItemId] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        countryStore.fetchCountries();
-        getUser();
+        loadDatas();
     }, []);
-
-    const getUser = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        setUser(user);
-    };
-
-    const login = async () => {
-        const { user, session, error } = await supabase.auth.signInWithOAuth({
-            provider: 'google'
-        });
-        console.log(user, session, error);
-    };
 
     const logout = async () => {
         const { error } = await supabase.auth.signOut();
-        setUser(null);
-        console.log(error);
+        authStore.user = null;
+        if (error) {
+            console.log('Error logging out:', error.message);
+            return;
+        }
+        navigate('/login');
+
     };
+
+    const loadDatas = async () => {
+        await authStore.getUser();
+        await countryStore.fetchCountries();
+    }
 
     const toggleEditMode = async (itemId) => {
         setEditItemId(itemId === editItemId ? null : itemId);
@@ -54,6 +53,7 @@ function Home() {
         <div className="container">
             <header className="my-4">
                 <h1 className="text-center">Supabase Countries</h1>
+                <ContentLoader isLoading={countryStore.loading} noContent={'dados inexistentes'}>
                 <ul className="list-group list-group-flush">
                     {countryStore.countries.map(country => (
                         <li key={country.id}
@@ -78,6 +78,7 @@ function Home() {
                         </li>
                     ))}
                 </ul>
+            </ContentLoader>
             </header>
             <div className="App-content">
                 <h2>Add Country</h2>
@@ -93,11 +94,7 @@ function Home() {
                 </form>
             </div>
             <div className="App-footer text-center my-4">
-                {user ? (
-                    <button className="btn btn-danger" onClick={logout}>Logout</button>
-                ) : (
-                    <button className="btn btn-primary" onClick={login}>Login</button>
-                )}
+                <button className="btn btn-danger" onClick={logout}>Logout</button>
             </div>
         </div>
     );

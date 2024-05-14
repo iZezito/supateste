@@ -1,9 +1,7 @@
-import supabase from "../services/config.js";
 
 import { observer } from "mobx-react-lite";
 import {useNavigate} from "react-router-dom";
 import { useRootStore } from "../stores/RootStore.jsx";
-import countryStore from "../stores/CountryStore.js";
 
 const Login = () => {
     const { authStore } = useRootStore();
@@ -12,7 +10,7 @@ const Login = () => {
     const login = async () => {
         console.log(authStore.loginForm);
         await authStore.login();
-        navigate('/');
+        navigate('/helloWorld');
     };
 
     const loginWithProvider = async (provider) => {
@@ -37,8 +35,7 @@ const Login = () => {
                             <div className="col-12 col-lg-5">
                                 <form onSubmit={async (e)=>{
                                     e.preventDefault();
-                                    await authStore.login();
-                                    navigate('/');
+                                    await login();
                                 }}>
                                     <div className="row gy-3 overflow-hidden">
                                         <div className="col-12">

@@ -1,4 +1,4 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, runInAction} from "mobx";
 import GenericService from "../services/GenericService.js";
 import { toJS } from "mobx";
 
@@ -12,6 +12,8 @@ class CountryStore{
     countryEditData = {
         name: ''
     }
+
+    loading = false;
     countries = [];
     countryService = new GenericService('countries');
     constructor(rootStore){
@@ -19,7 +21,14 @@ class CountryStore{
         makeAutoObservable(this);
     }
 
+    setLoading(value){
+        runInAction(() => {
+            this.loading = value;
+        })
+    }
+
     async fetchCountries(){
+        this.setLoading(true);
         await this.countryService.getAll().then(response => {
             if(response.error){
                 alert(response.error.message)
@@ -27,6 +36,7 @@ class CountryStore{
                 this.countries = response.data;
                 console.log(this.countries);
             }
+            this.setLoading(false);
         });
     }
 

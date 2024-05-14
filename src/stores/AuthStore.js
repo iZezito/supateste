@@ -34,6 +34,7 @@ class AuthStore {
             console.log(error);
         } else {
             console.log(data);
+            this.user = {}
         }
     }
 

@@ -12,6 +12,7 @@ const App = () => {
     return(
         <Routes>
             {authStore.user && <Route path="/" element={<Home />} />}
+            {authStore.user && <Route path="/helloWorld" element={<Home />} />}
             {!authStore.user && <Route path="*" element={<Login />} />}
         </Routes>
     )
