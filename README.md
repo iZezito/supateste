@@ -1,4 +1,4 @@
-#Supateste
+# Supateste
 
 Este projeto é uma aplicação React que utiliza o Supabase para autenticação de usuários e diferenciação de perfis.
 
